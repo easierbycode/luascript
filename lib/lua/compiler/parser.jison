@@ -64,6 +64,8 @@ chunk
 block
     : chunk
         { $$ = $1; }
+    |
+        { $$ = []; }
     ;
 
 chunkpart

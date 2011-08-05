@@ -30,5 +30,9 @@ exports.testAnonymousFunctions = function(test) {
   fun = Lua.evalText("return function ()\n 1\nend");
   test.strictEqual(null, fun());
 
+  // Default return value must be nil even for empty functions
+  fun = Lua.evalText("return function ()\n end");
+  test.strictEqual(null, fun());
+
   test.done();
 }
