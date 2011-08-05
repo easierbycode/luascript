@@ -1,2 +1,2 @@
-lib/lua/parser.js
+lib/lua/compiler/parser.js
 node_modules
