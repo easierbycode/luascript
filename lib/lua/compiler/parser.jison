@@ -52,7 +52,11 @@ chunk
     | chunkpart EOL
         { $1.push(["EOL"]); }
     | chunkpart
-        { $1; }
+        { $$ = $1; }
+    | laststat EOL
+        { $$ = [$1, ["EOL"]]; }
+    | laststat
+        { $$ = [$1]; }
     ;
 
 chunkpart
