@@ -5,28 +5,29 @@
 %lex
 %%
 
-";"\s*"\r"?"\n"       return 'EOL'
-"\r"?"\n"             return 'EOL'
-"\n"                  return 'EOL'
-";"                   return 'EOL'
-","                   return 'COMMA'
-\s+                   /* skip whitespace */
+";"\s*"\r"?"\n"        return 'EOL'
+"\r"?"\n"              return 'EOL'
+"\n"                   return 'EOL'
+";"                    return 'EOL'
+","                    return 'COMMA'
+\s+                    /* skip whitespace */
 
-"nil"                 return 'NIL'
-"true"                return 'TRUE'
-"false"               return 'FALSE'
-"return"              return 'RETURN'
-"function"            return 'FUNCTION'
-"end"                 return 'END'
+"nil"                  return 'NIL'
+"true"                 return 'TRUE'
+"false"                return 'FALSE'
+"return"               return 'RETURN'
+"function"             return 'FUNCTION'
+"end"                  return 'END'
 
-[0-9]+("."[0-9]+)?\b  return 'NUMBER'
-"*"                   return 'BINOP_MULT'
-"/"                   return 'BINOP_MULT'
-"-"                   return '-'
-"+"                   return '+'
-"("                   return '('
-")"                   return ')'
-<<EOF>>               return 'EOF'
+[0-9]+("."[0-9]+)?\b   return 'NUMBER'
+[a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
+"*"                    return 'BINOP_MULT'
+"/"                    return 'BINOP_MULT'
+"-"                    return '-'
+"+"                    return '+'
+"("                    return '('
+")"                    return ')'
+<<EOF>>                return 'EOF'
 
 /lex
 
@@ -63,18 +64,18 @@ chunk
         { $$ = []; }
     ;
 
-block
-    : chunk
-        { $$ = $1; }
-    |
-        { $$ = []; }
-    ;
-
 chunkpart
     : chunkpart EOL exp
         { $1.push(["EOL"], $3); }
     | exp
         { $$ = [$1]; }
+    ;
+
+block
+    : chunk
+        { $$ = $1; }
+    |
+        { $$ = []; }
     ;
 
 stat
@@ -87,6 +88,13 @@ laststat
         { $$ = ["RETURN", $2]; }
     | RETURN
         { $$ = ["RETURN", ["NIL"]]; }
+    ;
+
+namelist
+    : NAME COMMA namelist
+        { $3.unshift($1); }
+    | NAME
+        { $$ = [$1]; }
     ;
 
 explist
@@ -144,6 +152,13 @@ function
     ;
 
 funcbody
-    : '(' ')' block END
-        { $$ = [[], $3]; }
+    : '(' parlist ')' block END
+        { $$ = [$2, $4]; }
+    ;
+
+parlist
+    : namelist
+        { $$ = $1; }
+    |
+        { $$ = []; }
     ;
