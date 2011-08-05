@@ -11,6 +11,8 @@
 "/"                   return 'BINOP_MULT'
 "-"                   return 'BINOP_ADD'
 "+"                   return 'BINOP_ADD'
+"("                   return '('
+")"                   return ')'
 <<EOF>>               return 'EOF'
 
 /lex
@@ -32,8 +34,15 @@ expressions
 exp
     : NUMBER
         { $$ = ["NUMBER", $1]; }
+    | prefixexp
+        { $$ = $1; }
     | exp BINOP_MULT exp
         { $$ = ["BINOP", $2, $1, $3]; }
     | exp BINOP_ADD exp
         { $$ = ["BINOP", $2, $1, $3]; }
+    ;
+
+prefixexp
+    : '(' exp ')'
+        { $$ = $2; }
     ;
