@@ -11,8 +11,24 @@ exports.testArithmeticExpressions = function(test){
 };
 
 exports.testBooleansAndNil = function(test) {
+  // Default return value needs to be nil
+  test.equal(null, Lua.evalText("1 + 2"));
   test.equal(null, Lua.evalText("return nil"));
   test.equal(true, Lua.evalText("return true"));
   test.equal(false, Lua.evalText("return false"));
+  test.done();
+}
+
+exports.testAnonymousFunctions = function(test) {
+  var fun;
+
+  // Very simple
+  fun = Lua.evalText("return function ()\nreturn 1\nend");
+  test.equal(1, fun());
+
+  // Default return value must be nil
+  fun = Lua.evalText("return function ()\n 1\nend");
+  test.equal(null, fun());
+
   test.done();
 }

@@ -12,10 +12,12 @@
 ","                   return 'COMMA'
 \s+                   /* skip whitespace */
 
-"return"              return 'RETURN'
 "nil"                 return 'NIL'
 "true"                return 'TRUE'
 "false"               return 'FALSE'
+"return"              return 'RETURN'
+"function"            return 'FUNCTION'
+"end"                 return 'END'
 
 [0-9]+("."[0-9]+)?\b  return 'NUMBER'
 "*"                   return 'BINOP_MULT'
@@ -59,6 +61,11 @@ chunk
         { $$ = [$1]; }
     ;
 
+block
+    : chunk
+        { $$ = $1; }
+    ;
+
 chunkpart
     : chunkpart EOL exp
         { $1.push(["EOL"], $3); }
@@ -87,6 +94,8 @@ exp
         { $$ = ["TRUE"]; }
     | NUMBER
         { $$ = ["NUMBER", $1]; }
+    | function
+        { $$ = $1; }
     | prefixexp
         { $$ = $1; }
     | exp BINOP_MULT exp
@@ -102,4 +111,14 @@ exp
 prefixexp
     : '(' exp ')'
         { $$ = $2; }
+    ;
+
+function
+    : FUNCTION funcbody
+        { $$ = ["FUNCTION", $2[0], $2[1]]; }
+    ;
+
+funcbody
+    : '(' ')' block END
+        { $$ = [[], $3]; }
     ;
