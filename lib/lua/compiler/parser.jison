@@ -9,8 +9,8 @@
 [0-9]+("."[0-9]+)?\b  return 'NUMBER'
 "*"                   return 'BINOP_MULT'
 "/"                   return 'BINOP_MULT'
-"-"                   return 'BINOP_ADD'
-"+"                   return 'BINOP_ADD'
+"-"                   return '-'
+"+"                   return '+'
 "("                   return '('
 ")"                   return ')'
 <<EOF>>               return 'EOF'
@@ -19,7 +19,7 @@
 
 /* operator associations and precedence */
 
-%left BINOP_ADD
+%left '+' '-'
 %left BINOP_MULT
 
 %start expressions
@@ -38,8 +38,12 @@ exp
         { $$ = $1; }
     | exp BINOP_MULT exp
         { $$ = ["BINOP", $2, $1, $3]; }
-    | exp BINOP_ADD exp
+    | exp '+' exp
         { $$ = ["BINOP", $2, $1, $3]; }
+    | exp '-' exp
+        { $$ = ["BINOP", $2, $1, $3]; }
+    | '-' exp
+        { $$ = ["UNOP", $1, $2]; }
     ;
 
 prefixexp
