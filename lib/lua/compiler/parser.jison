@@ -89,6 +89,13 @@ laststat
         { $$ = ["RETURN", ["NIL"]]; }
     ;
 
+explist
+    : exp COMMA explist
+        { $3.unshift($1); }
+    | exp
+        { $$ = [$1]; }
+    ;
+
 exp
     : NIL
         { $$ = ["NIL"]; }
@@ -113,7 +120,21 @@ exp
     ;
 
 prefixexp
-    : '(' exp ')'
+    : functioncall
+        { $$ = $1; }
+    | '(' exp ')'
+        { $$ = $2; }
+    ;
+
+functioncall
+    : prefixexp args
+        { $$ = ["FUNCALL", $1, $2]; }
+    ;
+
+args
+    : '(' ')'
+        { $$ = []; }
+    | '(' explist ')'
         { $$ = $2; }
     ;
 

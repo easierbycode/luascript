@@ -40,3 +40,10 @@ exports.testAnonymousFunctions = function(test) {
 
   test.done();
 }
+
+exports.testFunctionCalls = function(test) {
+  var fun;
+  test.strictEqual(1, Lua.evalText("return (function ()\nreturn 1\nend)()"));
+  test.strictEqual(1, Lua.evalText("return (function ()\nreturn (function ()\nreturn 1\nend)\nend)()()"));
+  test.done();
+}
