@@ -1,9 +1,8 @@
-{ "name" : "my-project",
+{ "name" : "lua",
+  "main" : "./lib/lua.js" 
   "version" : "0.0.1",
-  "dependencies" : {
-    "jison" : "0.2.11"
-  },
   "devDependencies" : {
-    "vows" : "0.5.9"
+    "vows" : "0.5.9",
+    "jison" : "0.2.11"
   }
 }
