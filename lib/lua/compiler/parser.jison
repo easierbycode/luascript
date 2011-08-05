@@ -5,7 +5,13 @@
 %lex
 %%
 
+";"\s*"\r"?"\n"       return 'BREAK'
+"\r"?"\n"             return 'BREAK'
+"\n"                  return 'BREAK'
+";"                   return 'BREAK'
+
 \s+                   /* skip whitespace */
+
 [0-9]+("."[0-9]+)?\b  return 'NUMBER'
 "*"                   return 'BINOP_MULT'
 "/"                   return 'BINOP_MULT'
@@ -27,8 +33,17 @@
 %% /* language grammar */
 
 expressions
-    : exp EOF
+    : explist EOF
         { return $1; }
+    | EOF
+        { return []; }
+    ;
+
+explist
+    : explist BREAK exp
+        { $1.push(["BREAK"], $3); }
+    | exp
+        { $$ = [$1]; }
     ;
 
 exp
