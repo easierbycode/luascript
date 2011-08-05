@@ -1,14 +1,10 @@
-
-/* description: Parses end executes mathematical expressions. */
-
 /* lexical grammar */
 %lex
 %%
 
-";"\s*"\r"?"\n"        return 'EOL'
-"\r"?"\n"              return 'EOL'
-"\n"                   return 'EOL'
-";"                    return 'EOL'
+";"\s*"\r"?"\n"        return 'COLON'
+";"                    return 'COLON'
+("\r"?"\n")+           return 'NEWLINE'
 ","                    return 'COMMA'
 \s+                    /* skip whitespace */
 
@@ -48,25 +44,25 @@ expressions
     ;
 
 chunk
-    : chunkpart EOL laststat EOL
-        { $1.push(["EOL"], $3, ["EOL"]); }
-    | chunkpart EOL laststat
-        { $1.push(["EOL"], $3); }
-    | chunkpart EOL
-        { $1.push(["EOL"]); }
+    : chunkpart eol laststat eol
+        { $1.push($2, $3, $4); $$ = $1; }
+    | chunkpart eol laststat
+        { $1.push($2, $3); $$ = $1; }
+    | chunkpart eol
+        { $1.push($2); $$ = $1; }
     | chunkpart
         { $$ = $1; }
-    | laststat EOL
-        { $$ = [$1, ["EOL"]]; }
+    | laststat eol
+        { $$ = [$1, $2]; }
     | laststat
         { $$ = [$1]; }
-    | EOL
+    | eol
         { $$ = []; }
     ;
 
 chunkpart
-    : chunkpart EOL exp
-        { $1.push(["EOL"], $3); }
+    : chunkpart eol exp
+        { $1.push($2, $3); $$ = $1; }
     | exp
         { $$ = [$1]; }
     ;
@@ -90,16 +86,21 @@ laststat
         { $$ = ["RETURN", ["NIL"]]; }
     ;
 
+var
+    : NAME
+        { $$ = ["VAR", $1]; }
+    ;
+
 namelist
     : NAME COMMA namelist
-        { $3.unshift($1); }
+        { $3.unshift(["VAR", $1]); $$ = $3; }
     | NAME
-        { $$ = [$1]; }
+        { $$ = [["VAR", $1]]; }
     ;
 
 explist
     : exp COMMA explist
-        { $3.unshift($1); }
+        { $3.unshift($1); $$ = $3 }
     | exp
         { $$ = [$1]; }
     ;
@@ -128,7 +129,9 @@ exp
     ;
 
 prefixexp
-    : functioncall
+    : var
+        { $$ = $1; }
+    | functioncall
         { $$ = $1; }
     | '(' exp ')'
         { $$ = $2; }
@@ -161,4 +164,11 @@ parlist
         { $$ = $1; }
     |
         { $$ = []; }
+    ;
+
+eol
+    : COLON
+        { $$ = ["COLON"]; }
+    | NEWLINE
+        { $$ = ["NEWLINE"]; }
     ;

@@ -38,6 +38,14 @@ exports.testAnonymousFunctions = function(test) {
   fun = Lua.evalText("return function ()\n\n\nend");
   test.strictEqual(null, fun());
 
+  // Now with args
+  fun = Lua.evalText("return function (a, b)\nreturn a + b\nend");
+  test.strictEqual(3, fun(1, 2));
+
+  // Now with line break between args
+  fun = Lua.evalText("return function (a,\nb)\nreturn a + b\nend");
+  test.strictEqual(3, fun(1, 2));
+
   test.done();
 }
 
