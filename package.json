@@ -4,6 +4,6 @@
     "jison" : "0.2.11"
   },
   "devDependencies" : {
-    "qunit" : "0.1.5"
+    "vows" : "0.5.9"
   }
 }
