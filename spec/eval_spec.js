@@ -34,5 +34,9 @@ exports.testAnonymousFunctions = function(test) {
   fun = Lua.evalText("return function ()\n end");
   test.strictEqual(null, fun());
 
+  // Default return value must be nil even for empty functions with several line breaks
+  fun = Lua.evalText("return function ()\n\n\nend");
+  test.strictEqual(null, fun());
+
   test.done();
 }

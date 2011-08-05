@@ -59,6 +59,8 @@ chunk
         { $$ = [$1, ["EOL"]]; }
     | laststat
         { $$ = [$1]; }
+    | EOL
+        { $$ = []; }
     ;
 
 block
