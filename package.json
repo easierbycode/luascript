@@ -1,0 +1,9 @@
+{ "name" : "my-project",
+  "version" : "0.0.1",
+  "dependencies" : {
+    "jison" : "0.2.11"
+  },
+  "devDependencies" : {
+    "qunit" : "0.1.5"
+  }
+}
