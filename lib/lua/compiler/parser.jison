@@ -19,6 +19,7 @@
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
 "*"                    return 'BINOP_MULT'
 "/"                    return 'BINOP_MULT'
+"="                    return '='
 "-"                    return '-'
 "+"                    return '+'
 "("                    return '('
@@ -61,9 +62,9 @@ chunk
     ;
 
 chunkpart
-    : chunkpart eol exp
+    : chunkpart eol stat
         { $1.push($2, $3); $$ = $1; }
-    | exp
+    | stat
         { $$ = [$1]; }
     ;
 
@@ -75,15 +76,23 @@ block
     ;
 
 stat
-    : exp
-        { $$ = $1; }
+    : varlist '=' explist
+        { $$ = ["ASSIGN", $1, $3] }
     ;
 
 laststat
     : RETURN exp
+        /* This should be an explist but it can't be supported by JS */
         { $$ = ["RETURN", $2]; }
     | RETURN
         { $$ = ["RETURN", ["NIL"]]; }
+    ;
+
+varlist
+    : var COMMA varlist
+        { $3.unshift($1); $$ = $3; }
+    | var
+        { $$ = [$1]; }
     ;
 
 var

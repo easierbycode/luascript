@@ -6,13 +6,13 @@ exports.testArithmeticExpressions = function(test){
   test.strictEqual(-2, Lua.evalText("return -1+(2-3)"));
   test.strictEqual(-10, Lua.evalText("return 10*(2-3)"));
   test.strictEqual(-10, Lua.evalText("return 10/(2-3);"));
-  test.strictEqual(5, Lua.evalText("10/(2-3); return 2+3"));
+  test.strictEqual(5, Lua.evalText("a = 10/(2-3); return 2+3"));
   test.done();
 };
 
 exports.testBooleansAndNil = function(test) {
   // Default return value needs to be nil
-  test.strictEqual(null, Lua.evalText("1 + 2"));
+  test.strictEqual(null, Lua.evalText("b = 1 + 2"));
   test.strictEqual(null, Lua.evalText("return nil"));
   test.strictEqual(true, Lua.evalText("return true"));
   test.strictEqual(false, Lua.evalText("return false"));
@@ -27,7 +27,7 @@ exports.testAnonymousFunctions = function(test) {
   test.strictEqual(1, fun());
 
   // Default return value must be nil
-  fun = Lua.evalText("return function ()\n 1\nend");
+  fun = Lua.evalText("return function ()\n b = 1\nend");
   test.strictEqual(null, fun());
 
   // Default return value must be nil even for empty functions
@@ -53,5 +53,18 @@ exports.testFunctionCalls = function(test) {
   var fun;
   test.strictEqual(1, Lua.evalText("return (function ()\nreturn 1\nend)()"));
   test.strictEqual(1, Lua.evalText("return (function ()\nreturn (function ()\nreturn 1\nend)\nend)()()"));
+  test.done();
+}
+
+exports.testAssignments = function(test) {
+  // 1 x 1
+  test.strictEqual(3, Lua.evalText("a = 1 + 2; return a"));
+
+  // 2 x 1
+  test.strictEqual(3, Lua.evalText("a, b = 1 + 2; return a"));
+  test.strictEqual(null, Lua.evalText("a, b = 1 + 2; return b"));
+
+  // MISSING: Testing 2 x 3 but ensuring expressions
+  // happen in the expected order.
   test.done();
 }
