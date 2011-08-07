@@ -75,3 +75,8 @@ exports.testAssignments = function(test) {
   // MISSING: Testing 2 x 4 but ensuring expressions happen in the expected order.
   test.done();
 }
+
+exports.testGlobalVar = function(test) {
+  test.equal(Object, Lua.evalText("return _G").constructor);
+  test.done();
+}
