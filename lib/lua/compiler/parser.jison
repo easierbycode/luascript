@@ -102,8 +102,8 @@ assignment
     ;
 
 varlist
-    : var comma varlist
-        { $3.unshift($1); $$ = $3; }
+    : varlist comma var
+        { $1.push($3); $$ = $3; }
     | var
         { $$ = [$1]; }
     ;
@@ -114,15 +114,15 @@ var
     ;
 
 namelist
-    : NAME comma namelist
-        { $3.unshift(["VAR", $1]); $$ = $3; }
+    : namelist comma NAME
+        { $1.push(["VAR", $3]); $$ = $1; }
     | NAME
         { $$ = [["VAR", $1]]; }
     ;
 
 explist
-    : exp comma explist
-        { $3.unshift($1); $$ = $3 }
+    : explist comma exp
+        { $1.push($3); $$ = $1 }
     | exp
         { $$ = [$1]; }
     ;
