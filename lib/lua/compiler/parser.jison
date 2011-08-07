@@ -16,6 +16,7 @@
 "do"                   return 'DO'
 "end"                  return 'END'
 "local"                return 'LOCAL'
+"while"                return 'WHILE'
 
 [0-9]+("."[0-9]+)?\b   return 'NUMBER'
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
@@ -93,7 +94,7 @@ stat
     | DO block END
         { $$ = ["FUNCALL", ["FUNCTION", [], $2], []]; }
     | WHILE exp DO block END
-        { $$ = ["WHILE", $1, $2]; }
+        { $$ = ["WHILE", $2, $4]; }
     | LOCAL namelist
         { $$ = ["LOCAL_ASSIGN", $2, []]; }
     | LOCAL namelist '=' explist

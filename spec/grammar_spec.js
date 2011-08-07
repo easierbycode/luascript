@@ -113,6 +113,12 @@ exports.testDoEnd = function(test) {
   test.done();
 }
 
+exports.testWhile = function(test) {
+  test.strictEqual(undefined, Lua.evalText("x = true\nwhile x do\nx = false\nlocal a = 1\nend\nreturn a"));
+  test.strictEqual(0,         Lua.evalText("x = 0\nwhile x do\nx = nil\nlocal a = 1\nend\nreturn x"));
+  test.done();
+}
+
 // exports.testAllowFunctionCallAsStatement = function(test) {
 //   test.strictEqual(1, Lua.evalText("x = 0\na = function()\nx = x + 1\nend\na()\nreturn x"));
 //   test.done();
