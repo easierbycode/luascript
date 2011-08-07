@@ -14,6 +14,7 @@
 "return"               return 'RETURN'
 "function"             return 'FUNCTION'
 "end"                  return 'END'
+"local"                return 'LOCAL'
 
 [0-9]+("."[0-9]+)?\b   return 'NUMBER'
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
@@ -88,6 +89,10 @@ block
 stat
     : assignment
         { $$ = $1; }
+    | LOCAL namelist
+        { $$ = ["LOCAL_ASSIGN", $2, []]; }
+    | LOCAL namelist '=' explist
+        { $$ = ["LOCAL_ASSIGN", $2, $4]; }
     ;
 
 retstat
