@@ -1,6 +1,14 @@
-## Luascript
+# Luascript
+
+Translate Lua 5.2 to Javascript.
 
 ## Intrinsic limitations
+
+Obviously, porting Lua to Javascript has some feature limitations. Some of those limitations are obvious, like access to C endpoints, but some are not. These section outlines those limitations.
+
+### Syntax limitations
+
+Those are limitations that happen at the syntax level:
 
 * Returning more than one value in a function is theoretically possible, but would greatly impact performance and therefore is disabled:
 
@@ -10,4 +18,10 @@
 
   Maybe ECMAScript Harmony will provide tools to make this more viable;
 
-* Modifying __index and __newindex in metatable does not work. ECMAScript's proxies will likely make this possible;
+* goto statements may be implemented, but are not supported on first versions.
+
+### Stdlib limitations
+
+* setmetatable does not support modifying __index and __newindex. ECMAScript's proxies will likely make this possible;
+
+* setfenv is not supported and probably never will;

@@ -38,49 +38,40 @@
 %% /* language grammar */
 
 expressions
-    : chunk EOF
+    : block EOF
         { return $1; }
-    | EOF
-        { return []; }
-    ;
-
-chunk
-    : chunkpart eol laststat eol
-        { $1.push($2, $3, $4); $$ = $1; }
-    | chunkpart eol laststat
-        { $1.push($2, $3); $$ = $1; }
-    | chunkpart eol
-        { $1.push($2); $$ = $1; }
-    | chunkpart
-        { $$ = $1; }
-    | laststat eol
-        { $$ = [$1, $2]; }
-    | laststat
-        { $$ = [$1]; }
-    | eol
-        { $$ = []; }
-    ;
-
-chunkpart
-    : chunkpart eol stat
-        { $1.push($2, $3); $$ = $1; }
-    | stat
-        { $$ = [$1]; }
     ;
 
 block
-    : chunk
+    : blockpart retstat eol
+        { $1.push($2, $3); $$ = $1; }
+    | blockpart retstat
+        { $1.push($2); $$ = $1; }
+    | retstat eol
+        { $$ = [$1, $2]; }
+    | retstat
+        { $$ = [$1]; }
+    | blockpart
         { $$ = $1; }
     |
         { $$ = []; }
     ;
 
-stat
-    : varlist '=' explist
-        { $$ = ["ASSIGN", $1, $3] }
+blockpart
+    : blockpart stat
+        { $1.push($2); $$ = $1; }
+    | stat
+        { $$ = [$1]; }
     ;
 
-laststat
+stat
+    : eol
+        { $$ = [$1]; }
+    | varlist '=' explist
+        { $$ = ["ASSIGN", $1, $3]; }
+    ;
+
+retstat
     : RETURN exp
         /* This should be an explist but it can't be supported by JS */
         { $$ = ["RETURN", $2]; }
