@@ -1,4 +1,4 @@
-var Lua = require("lib/lua.js");
+require("lib/lua.js");
 
 exports.testArithmeticExpressions = function(test){
   test.strictEqual(3, Lua.evalText("return 1+2"));

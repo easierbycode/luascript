@@ -92,6 +92,8 @@ stat
         { $$ = $1; }
     | DO block END
         { $$ = ["FUNCALL", ["FUNCTION", [], $2], []]; }
+    | WHILE exp DO block END
+        { $$ = ["WHILE", $1, $2]; }
     | LOCAL namelist
         { $$ = ["LOCAL_ASSIGN", $2, []]; }
     | LOCAL namelist '=' explist
