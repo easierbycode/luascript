@@ -83,3 +83,8 @@ exports.testGlobalVar = function(test) {
   test.equal(Object, Lua.evalText("return _G").constructor);
   test.done();
 }
+
+// exports.testAllowFunctionCallAsStatement = function(test) {
+//   test.strictEqual(1, Lua.evalText("x = 0\na = function()\nx = x + 1\nend\na()\nreturn x"));
+//   test.done();
+// }

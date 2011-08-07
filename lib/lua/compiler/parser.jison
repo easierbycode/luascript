@@ -2,7 +2,7 @@
 %lex
 %%
 
-";"\s*\r?\n            return 'COLON'
+";"\s*(\r?\n)+         return 'COLON'
 ";"                    return 'COLON'
 (\r?\n)+               return 'NEWLINE'
 ","                    return 'COMMA'
@@ -38,37 +38,51 @@
 %% /* language grammar */
 
 expressions
-    : block EOF
+    : chunk EOF
         { return $1; }
     ;
 
-block
-    : blockpart retstat eol
-        { $1.push($2, $3); $$ = $1; }
-    | blockpart retstat
+chunk
+    : statpart eol retpart
+        { $1.push($2); $$ = $1.concat($3); }
+    | statpart eol
         { $1.push($2); $$ = $1; }
-    | retstat eol
-        { $$ = [$1, $2]; }
-    | retstat
-        { $$ = [$1]; }
-    | blockpart
+    | statpart
         { $$ = $1; }
+    | eol retpart
+        { $2.unshift($1); $$ = $2; }
+    | retpart
+        { $$ = $1; }
+    | eol
+        { $$ = [$1]; }
     |
         { $$ = []; }
     ;
 
-blockpart
-    : stat blockpart
-        { $2.unshift($1); $$ = $2; }
+statpart
+    : statpart eol stat
+        { $1.push($2, $3); $$ = $1; }
+    | eol stat
+        { $$ = [$1, $2]; }
     | stat
         { $$ = [$1]; }
     ;
 
-stat
-    : eol
+retpart
+    : retstat eol
+        { $$ = [$1, $2]; }
+    | retstat
+        { $$ = [$1]; }
+    ;
+
+block
+    : chunk
         { $$ = $1; }
-    | varlist '=' explist
-        { $$ = ["ASSIGN", $1, $3]; }
+    ;
+
+stat
+    : assignment
+        { $$ = $1; }
     ;
 
 retstat
@@ -77,6 +91,14 @@ retstat
         { $$ = ["RETURN", $2]; }
     | RETURN
         { $$ = ["RETURN", ["NIL"]]; }
+    ;
+
+assignment
+    : var '=' exp
+        /* Force = to avoid conflicts with prefixexp */
+        { $$ = ["ASSIGN", [$1], [$3]]; }
+    | var comma varlist '=' explist
+        { $3.unshift($1); $$ = ["ASSIGN", $3, $5]; }
     ;
 
 varlist
