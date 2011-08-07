@@ -17,11 +17,11 @@
 
 [0-9]+("."[0-9]+)?\b   return 'NUMBER'
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
-"*"                    return 'BINOP_MULT'
-"/"                    return 'BINOP_MULT'
-"="                    return '='
-"-"                    return '-'
-"+"                    return '+'
+"*"(\r?\n)*            return '*'
+"/"(\r?\n)*            return '/'
+"="(\r?\n)*            return '='
+"-"(\r?\n)*            return '-'
+"+"(\r?\n)*            return '+'
 "("                    return '('
 ")"                    return ')'
 <<EOF>>                return 'EOF'
@@ -30,8 +30,13 @@
 
 /* operator associations and precedence */
 
+%left or
+%left and
+%left '<' '>' '<=' '>=' '~=' '=='
+%right '..'
 %left '+' '-'
-%left BINOP_MULT
+%left '*' '/' '%'
+%right '^'
 
 %start expressions
 
@@ -140,7 +145,9 @@ exp
         { $$ = $1; }
     | prefixexp
         { $$ = $1; }
-    | exp BINOP_MULT exp
+    | exp '*' exp
+        { $$ = ["BINOP", $2, $1, $3]; }
+    | exp '/' exp
         { $$ = ["BINOP", $2, $1, $3]; }
     | exp '+' exp
         { $$ = ["BINOP", $2, $1, $3]; }

@@ -6,6 +6,7 @@ exports.testArithmeticExpressions = function(test){
   test.strictEqual(-2, Lua.evalText("return -1+(2-3)"));
   test.strictEqual(-10, Lua.evalText("return 10*(2-3)"));
   test.strictEqual(-10, Lua.evalText("return 10/(2-3);"));
+  test.strictEqual(-5, Lua.evalText("return -10-(-2-\n3);"));
   test.strictEqual(5, Lua.evalText("a = 10/(2-3); return 2+3"));
   test.done();
 };
