@@ -107,6 +107,12 @@ exports.testLocalVar = function(test) {
   test.done();
 }
 
+exports.testDoEnd = function(test) {
+  test.strictEqual(0, Lua.evalText("x = 0\ndo\nlocal x = 1\nend\nreturn x"));
+  test.strictEqual(2, Lua.evalText("x = 0\ndo\nx = 2\nend\nreturn x"));
+  test.done();
+}
+
 // exports.testAllowFunctionCallAsStatement = function(test) {
 //   test.strictEqual(1, Lua.evalText("x = 0\na = function()\nx = x + 1\nend\na()\nreturn x"));
 //   test.done();

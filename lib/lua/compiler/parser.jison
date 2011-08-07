@@ -13,6 +13,7 @@
 "false"                return 'FALSE'
 "return"               return 'RETURN'
 "function"             return 'FUNCTION'
+"do"                   return 'DO'
 "end"                  return 'END'
 "local"                return 'LOCAL'
 
@@ -89,6 +90,8 @@ block
 stat
     : assignment
         { $$ = $1; }
+    | DO block END
+        { $$ = ["FUNCALL", ["FUNCTION", [], $2], []]; }
     | LOCAL namelist
         { $$ = ["LOCAL_ASSIGN", $2, []]; }
     | LOCAL namelist '=' explist
