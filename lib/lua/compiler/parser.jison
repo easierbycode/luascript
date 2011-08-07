@@ -19,6 +19,7 @@
 "while"                return 'WHILE'
 "repeat"               return 'REPEAT'
 "until"                return 'UNTIL'
+"break"                return 'BREAK'
 
 [0-9]+("."[0-9]+)?\b   return 'NUMBER'
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
@@ -93,6 +94,8 @@ block
 stat
     : assignment
         { $$ = $1; }
+    | BREAK
+        { $$ = ["BREAK"]; }
     | DO block END
         { $$ = ["FUNCALL", ["FUNCTION", [], $2], []]; }
     | WHILE exp DO block END
