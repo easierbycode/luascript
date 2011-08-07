@@ -2,9 +2,9 @@
 %lex
 %%
 
-";"\s*"\r"?"\n"        return 'COLON'
+";"\s*\r?\n            return 'COLON'
 ";"                    return 'COLON'
-("\r"?"\n")+           return 'NEWLINE'
+(\r?\n)+               return 'NEWLINE'
 ","                    return 'COMMA'
 \s+                    /* skip whitespace */
 
@@ -58,15 +58,15 @@ block
     ;
 
 blockpart
-    : blockpart stat
-        { $1.push($2); $$ = $1; }
+    : stat blockpart
+        { $2.unshift($1); $$ = $2; }
     | stat
         { $$ = [$1]; }
     ;
 
 stat
     : eol
-        { $$ = [$1]; }
+        { $$ = $1; }
     | varlist '=' explist
         { $$ = ["ASSIGN", $1, $3]; }
     ;
@@ -80,7 +80,7 @@ retstat
     ;
 
 varlist
-    : var COMMA varlist
+    : var comma varlist
         { $3.unshift($1); $$ = $3; }
     | var
         { $$ = [$1]; }
@@ -92,14 +92,14 @@ var
     ;
 
 namelist
-    : NAME COMMA namelist
+    : NAME comma namelist
         { $3.unshift(["VAR", $1]); $$ = $3; }
     | NAME
         { $$ = [["VAR", $1]]; }
     ;
 
 explist
-    : exp COMMA explist
+    : exp comma explist
         { $3.unshift($1); $$ = $3 }
     | exp
         { $$ = [$1]; }
@@ -171,4 +171,11 @@ eol
         { $$ = ["COLON"]; }
     | NEWLINE
         { $$ = ["NEWLINE"]; }
+    ;
+
+comma
+    : COMMA
+        { $$ = $1; }
+    | COMMA NEWLINE
+        { $$ = $1; }
     ;

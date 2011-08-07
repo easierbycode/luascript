@@ -72,7 +72,10 @@ exports.testAssignments = function(test) {
   test.strictEqual(2, Lua.evalText("a, b = 1, 2; a, b = b, a; return a"));
   test.strictEqual(1, Lua.evalText("a, b = 1, 2; a, b = b, a; return b"));
 
-  // MISSING: Testing 2 x 4 but ensuring expressions happen in the expected order.
+  // 2 x 4 parallel
+  test.strictEqual(0,    Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\na, b = x, f(), f()\nreturn a"));
+  test.strictEqual(null, Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\na, b = x, f(), f()\nreturn b"));
+  test.strictEqual(2,    Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\na, b = x, f(), f()\nreturn x"));
   test.done();
 }
 
