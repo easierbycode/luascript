@@ -8,6 +8,8 @@ exports.testArithmeticExpressions = function(test){
   test.strictEqual(-10, Lua.evalText("return 10/(2-3);"));
   test.strictEqual(-5, Lua.evalText("return -10-(-2-\n3);"));
   test.strictEqual(5, Lua.evalText("a = 10/(2-3); return 2+3"));
+
+  a = undefined;
   test.done();
 };
 
@@ -17,6 +19,8 @@ exports.testBooleansAndNil = function(test) {
   test.strictEqual(null, Lua.evalText("return nil"));
   test.strictEqual(true, Lua.evalText("return true"));
   test.strictEqual(false, Lua.evalText("return false"));
+
+  b = undefined;
   test.done();
 }
 
@@ -47,6 +51,7 @@ exports.testAnonymousFunctions = function(test) {
   fun = Lua.evalText("return function (a,\nb)\nreturn a + b\nend");
   test.strictEqual(3, fun(1, 2));
 
+  b = undefined;
   test.done();
 }
 
@@ -77,6 +82,8 @@ exports.testAssignments = function(test) {
   test.strictEqual(0,    Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\na, b = x, f(), f()\nreturn a"));
   test.strictEqual(null, Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\na, b = x, f(), f()\nreturn b"));
   test.strictEqual(2,    Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\na, b = x, f(), f()\nreturn x"));
+
+  a = undefined; b = undefined; x = undefined; f = undefined;
   test.done();
 }
 
@@ -104,18 +111,32 @@ exports.testLocalVar = function(test) {
   test.strictEqual(null, Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\nlocal a, b = x, f(), f()\nreturn b"));
   test.strictEqual(2,    Lua.evalText("x = 0\nf = function()\nx = x + 1\nend\nlocal a, b = x, f(), f()\nreturn x"));
 
+  a = undefined; b = undefined; x = undefined; f = undefined;
   test.done();
 }
 
 exports.testDoEnd = function(test) {
   test.strictEqual(0, Lua.evalText("x = 0\ndo\nlocal x = 1\nend\nreturn x"));
   test.strictEqual(2, Lua.evalText("x = 0\ndo\nx = 2\nend\nreturn x"));
+
+  x = undefined;
   test.done();
 }
 
 exports.testWhile = function(test) {
   test.strictEqual(undefined, Lua.evalText("x = true\nwhile x do\nx = false\nlocal a = 1\nend\nreturn a"));
-  test.strictEqual(0,         Lua.evalText("x = 0\nwhile x do\nx = nil\nlocal a = 1\nend\nreturn x"));
+  test.strictEqual(null,      Lua.evalText("x = 0\nwhile x do\nx = nil\nlocal a = 1\nend\nreturn x"));
+
+  x = undefined;
+  test.done();
+}
+
+exports.testRepeat = function(test) {
+  test.strictEqual(undefined, Lua.evalText("x = false\nrepeat\nx = true\nlocal a = 1\nuntil x\nreturn a"));
+  test.strictEqual(true,      Lua.evalText("repeat\nx = true\nlocal a = true\nuntil a\nreturn x"));
+  test.strictEqual(0,         Lua.evalText("x = nil\nrepeat\nx = 0\nlocal a = 1\nuntil x\nreturn x"));
+
+  x = undefined;
   test.done();
 }
 
