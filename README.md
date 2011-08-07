@@ -1,10 +1,10 @@
-# Luascript
+# LuaScript
 
 Translate Lua 5.2 to Javascript.
 
 ## Intrinsic limitations
 
-Obviously, porting Lua to Javascript has some feature limitations. Some of those limitations are obvious, like access to C endpoints, but some are not. These section outlines those limitations.
+Obviously, porting Lua to JavaScript has some feature limitations. Some of those limitations are obvious, like access to C endpoints, but some are not. These section outlines those limitations.
 
 ### Syntax limitations
 
