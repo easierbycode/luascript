@@ -205,16 +205,16 @@ exports.testIf = function(test) {
 }
 
 exports.testTDOT = function(test) {
-  // Invalid
-  test.throws(function(){
-    Lua.translateText("function x(a, b)\nreturn ...\nend");
-  }, "cannot use '...' outside a vararg function");
-
   // With binops
   test.strictEqual(3, Lua.evalText("function x(a, b, ...)\nreturn a + 2\nend\nreturn x(1,2,3)"));
   test.strictEqual(4, Lua.evalText("function x(a, b, ...)\nreturn b + 2\nend\nreturn x(1,2,3)"));
   test.strictEqual(5, Lua.evalText("function x(a, b, ...)\nreturn ... + 2\nend\nreturn x(1,2,3)"));
   test.strictEqual(5, Lua.evalText("function x(a, b, ...)\nreturn ... + 2\nend\nreturn x(1,2,3,4)"));
+
+  // Invalid
+  test.throws(function(){
+    Lua.translateText("function x(a, b)\nreturn ...\nend");
+  }, "cannot use '...' outside a vararg function");
 
   // With funcalls
   f = function (a, b, c) { return a + b - c; }
@@ -225,11 +225,29 @@ exports.testTDOT = function(test) {
   test.strictEqual(2, Lua.evalText("function x(a, b, ...)\nreturn f(..., ...)\nend\nreturn x(1,2,3,4)"));
   test.strictEqual(2, Lua.evalText("function x(a, b, ...)\nreturn f(..., ...)\nend\nreturn x(1,2,3,4,5)"));
 
+  // Invalid
+  test.throws(function(){
+    Lua.translateText("function x(a, b)\nreturn f(...)\nend");
+  }, "cannot use '...' outside a vararg function");
+
   f = undefined; x = undefined;
   test.done();
 }
 
 exports.testTDOTAssignments = function(test) {
+  // Invalid
+  test.throws(function(){
+    Lua.translateText("function x(a, b)\na = ...\nend");
+  }, "cannot use '...' outside a vararg function");
+
+  test.throws(function(){
+    Lua.translateText("function x(a, b)\na, b = ...\nend");
+  }, "cannot use '...' outside a vararg function");
+
+  test.throws(function(){
+    Lua.translateText("function x(a, b)\na, b = 1, ...\nend");
+  }, "cannot use '...' outside a vararg function");
+
   // 1 x 1
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal a = ...\nreturn a\nend\nreturn x(1)"));
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal a = ...\nreturn a\nend\nreturn x(1,2)"));
