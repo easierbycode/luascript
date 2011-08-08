@@ -8,12 +8,21 @@
 ","                    return 'COMMA'
 \s+                    /* skip whitespace */
 
+"if"                   return "IF"
+"then"                 return "THEN"
+"else"                 return "ELSE"
+"elseif"               return "ELSEIF"
+"for"                  return "FOR"
+"in"                   return "IN"
+"not"                  return "NOT"
+"and"                  return "AND"
+"or"                   return "OR"
 "nil"                  return 'NIL'
 "true"                 return 'TRUE'
 "false"                return 'FALSE'
-"return"               return 'RETURN'
 "function"             return 'FUNCTION'
 "do"                   return 'DO'
+"return"               return 'RETURN'
 "end"                  return 'END'
 "local"                return 'LOCAL'
 "while"                return 'WHILE'
