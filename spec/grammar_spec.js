@@ -229,6 +229,59 @@ exports.testTDOT = function(test) {
   test.done();
 }
 
+exports.testTDOTAssignments = function(test) {
+  // 1 x 1
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a = ...\nreturn a\nend\nreturn x(1)"));
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a = ...\nreturn a\nend\nreturn x(1,2)"));
+
+  // 2 x 2
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b = 1, ...\nreturn a\nend\nreturn x(2)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = 1, ...\nreturn b\nend\nreturn x(2)"));
+
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b = 1, ...\nreturn a\nend\nreturn x(2,3)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = 1, ...\nreturn b\nend\nreturn x(2,3)"));
+
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = ..., 1\nreturn a\nend\nreturn x(2,3)"));
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b = ..., 1\nreturn b\nend\nreturn x(2,3)"));
+
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = ..., ...\nreturn a\nend\nreturn x(2,3)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = ..., ...\nreturn b\nend\nreturn x(2,3)"));
+
+  // 2 x 4
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b = 1, ..., 3, 4\nreturn a\nend\nreturn x(2)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = 1, ..., 3, 4\nreturn b\nend\nreturn x(2)"));
+
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b = 1, ..., 3, 4\nreturn a\nend\nreturn x(2,3)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = 1, ..., 3, 4\nreturn b\nend\nreturn x(2,3)"));
+
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b = ..., 4, 5, 6\nreturn a\nend\nreturn x(2,3)"));
+  test.strictEqual(4, Lua.evalText("function x(...)\nlocal a, b = ..., 4, 5, 6\nreturn b\nend\nreturn x(2,3)"));
+
+  // 4 x 2
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b, c, d = ...\nreturn a\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b, c, d = ...\nreturn b\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(3, Lua.evalText("function x(...)\nlocal a, b, c, d = ...\nreturn c\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(4, Lua.evalText("function x(...)\nlocal a, b, c, d = ...\nreturn d\nend\nreturn x(1,2,3,4)"));
+
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn a\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn b\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(5, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn c\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(6, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn d\nend\nreturn x(1,2,3,4)"));
+
+  test.strictEqual(0, Lua.evalText("function x(...)\nlocal a, b, c, d = 0, ..., 5\nreturn a\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b, c, d = 0, ..., 5\nreturn b\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b, c, d = 0, ..., 5\nreturn c\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(5, Lua.evalText("function x(...)\nlocal a, b, c, d = 0, ..., 5\nreturn d\nend\nreturn x(1,2,3,4)"));
+
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., ...\nreturn a\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., ...\nreturn b\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., ...\nreturn c\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(3, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., ...\nreturn d\nend\nreturn x(1,2,3,4)"));
+
+  x = undefined;
+  test.done();
+}
+
 // exports.testAllowFunctionCallAsStatement = function(test) {
 //   test.strictEqual(1, Lua.evalText("x = 0\na = function()\nx = x + 1\nend\na()\nreturn x"));
 //   test.done();
