@@ -32,16 +32,21 @@ exports.testAnonymousFunctions = function(test) {
   test.strictEqual(1, fun());
 
   // Default return value must be nil
-  fun = Lua.evalText("return function ()\n b = 1\nend");
+  fun = Lua.evalText("return function ()\nb = 1\nend");
   test.strictEqual(null, fun());
 
   // Default return value must be nil even for empty functions
-  fun = Lua.evalText("return function ()\n end");
+  fun = Lua.evalText("return function ()\nend");
   test.strictEqual(null, fun());
 
   // Default return value must be nil even for empty functions with several line breaks
   fun = Lua.evalText("return function ()\n\n\nend");
   test.strictEqual(null, fun());
+
+  // We can skip "return null" if a return is added
+  // If no return, no need to wrap the block.
+  test.strictEqual(false, !!Lua.translateText("return function (a, b)\nreturn a + b\nend").match("return null"));
+  test.strictEqual(true,  !!Lua.translateText("return function (a, b)\nc = 10\nend").match("return null"));
 
   // Now with args
   fun = Lua.evalText("return function (a, b)\nreturn a + b\nend");
