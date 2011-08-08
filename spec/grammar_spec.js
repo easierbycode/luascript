@@ -286,6 +286,11 @@ exports.testTDOTAssignments = function(test) {
   test.strictEqual(3, Lua.evalText("function x(...)\nlocal a, b, c, d = ...\nreturn c\nend\nreturn x(1,2,3,4)"));
   test.strictEqual(4, Lua.evalText("function x(...)\nlocal a, b, c, d = ...\nreturn d\nend\nreturn x(1,2,3,4)"));
 
+  test.strictEqual(2, Lua.evalText("function x(e, ...)\nlocal a, b, c, d = ...\nreturn a\nend\nreturn x(1,2,3,4,5)"));
+  test.strictEqual(3, Lua.evalText("function x(e, ...)\nlocal a, b, c, d = ...\nreturn b\nend\nreturn x(1,2,3,4,5)"));
+  test.strictEqual(4, Lua.evalText("function x(e, ...)\nlocal a, b, c, d = ...\nreturn c\nend\nreturn x(1,2,3,4,5)"));
+  test.strictEqual(5, Lua.evalText("function x(e, ...)\nlocal a, b, c, d = ...\nreturn d\nend\nreturn x(1,2,3,4,5)"));
+
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn a\nend\nreturn x(1,2,3,4)"));
   test.strictEqual(2, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn b\nend\nreturn x(1,2,3,4)"));
   test.strictEqual(5, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., 5, 6\nreturn c\nend\nreturn x(1,2,3,4)"));
