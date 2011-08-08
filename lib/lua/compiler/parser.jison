@@ -106,7 +106,7 @@ stat
     | BREAK
         { $$ = ["BREAK"]; }
     | DO block END
-        { $$ = ["FUNCALL", ["FUNCTION", [], $2], []]; }
+        { $$ = ["DO", $2]; }
     | WHILE exp DO block END
         { $$ = ["WHILE", $2, $4]; }
     | REPEAT block UNTIL exp

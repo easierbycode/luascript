@@ -130,8 +130,12 @@ exports.testLocalVar = function(test) {
 }
 
 exports.testDoEnd = function(test) {
+  // Local and global variables in while
   test.strictEqual(0, Lua.evalText("x = 0\ndo\nlocal x = 1\nend\nreturn x"));
   test.strictEqual(2, Lua.evalText("x = 0\ndo\nx = 2\nend\nreturn x"));
+
+  // Return
+  test.strictEqual(10, Lua.evalText("do\nreturn 10\nend"));
 
   // Assigning an external global variable to a local variable should work
   test.strictEqual(3, Lua.evalText("x = 1\na = 2\ndo\nlocal x = x\na = a + x\nend\nreturn a"));
@@ -141,10 +145,12 @@ exports.testDoEnd = function(test) {
 }
 
 exports.testWhile = function(test) {
-  // Pending, needs let support
-  // test.strictEqual(undefined, Lua.evalText("x = true\nwhile x do\nx = false\nlocal a = 1\nend\nreturn a"));
-
+  // Local and global variables in while
+  test.strictEqual(undefined, Lua.evalText("x = true\nwhile x do\nx = false\nlocal a = 1\nend\nreturn a"));
   test.strictEqual(null,      Lua.evalText("x = 0\nwhile x do\nx = nil\nlocal a = 1\nend\nreturn x"));
+
+  // Return
+  test.strictEqual(10, Lua.evalText("while true do\nreturn 10\nend"));
 
   // Break
   test.strictEqual(true, Lua.evalText("while true do\nx = true;break;x = false\nend\nreturn x"));
@@ -155,11 +161,13 @@ exports.testWhile = function(test) {
 }
 
 exports.testRepeat = function(test) {
-  // Pending, needs let support
-  // test.strictEqual(undefined, Lua.evalText("x = false\nrepeat\nx = true\nlocal a = 1\nuntil x\nreturn a"));
-
+  // Local and global variables in while
+  test.strictEqual(undefined, Lua.evalText("x = false\nrepeat\nx = true\nlocal a = 1\nuntil x\nreturn a"));
   test.strictEqual(true,      Lua.evalText("repeat\nx = true\nlocal a = true\nuntil a\nreturn x"));
   test.strictEqual(0,         Lua.evalText("x = nil\nrepeat\nx = 0\nlocal a = 1\nuntil x\nreturn x"));
+
+  // Return
+  test.strictEqual(10, Lua.evalText("repeat\nreturn 10\nuntil false"));
 
   // Break
   test.strictEqual(true, Lua.evalText("repeat\nx = true;break;x = false\nuntil false\nreturn x"));

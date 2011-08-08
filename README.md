@@ -20,16 +20,6 @@ Those are limitations that happen at the syntax level:
 
 * goto statements may be implemented, but are not supported currently;
 
-* Variables create inside while/repeat/if expressions leak to their outer scope. This does not happen in Lua, but happens in LuaScript. This can be solved with today tools, but will be solved more elegantly with let. In Lua:
-
-        if true then a = 0 end
-        a --> nil
-
-  In LuaScript:
-
-        if true then a = 0 end
-        a --> 1
-
 ### STDLIB limitations
 
 Limitations regarding STDLIB methods:
