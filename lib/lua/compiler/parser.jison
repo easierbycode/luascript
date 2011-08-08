@@ -148,7 +148,7 @@ elseifs
 
 elseif
     : ELSEIF exp THEN block
-        { $$ = ["ELSEIF", exp, block]; }
+        { $$ = ["ELSEIF", $2, $4]; }
     ;
 
 else

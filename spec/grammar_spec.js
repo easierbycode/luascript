@@ -182,6 +182,28 @@ exports.testRepeat = function(test) {
   test.done();
 }
 
+exports.testIf = function(test) {
+  // Local and global variables in while
+  test.strictEqual(undefined, Lua.evalText("x = true\nif true then\nx = false\nlocal a = 1\nend\nreturn a"));
+  test.strictEqual(null,      Lua.evalText("x = 0\nif true then\nx = nil\nlocal a = 1\nend\nreturn x"));
+
+  // Else
+  test.strictEqual(undefined, Lua.evalText("x = true\nif false then\nelse\nx = false\nlocal a = 1\nend\nreturn a"));
+  test.strictEqual(null,      Lua.evalText("x = 0\nif false then\nelse\nx = nil\nlocal a = 1\nend\nreturn x"));
+
+  // Elsif
+  test.strictEqual(undefined, Lua.evalText("x = true\nif false then\nelseif true then\nx = false\nlocal a = 1\nend\nreturn a"));
+  test.strictEqual(null,      Lua.evalText("x = 0\nif false then\nelseif true then\nx = nil\nlocal a = 1\nend\nreturn x"));
+
+  // Return
+  test.strictEqual(10, Lua.evalText("if true then\nreturn 10\nend"));
+  test.strictEqual(20, Lua.evalText("if nil then\nreturn 10\nelse\nreturn 20\nend"));
+  test.strictEqual(20, Lua.evalText("if false then\nreturn 10\nelse\nreturn 20\nend"));
+
+  x = undefined;
+  test.done();
+}
+
 // exports.testAllowFunctionCallAsStatement = function(test) {
 //   test.strictEqual(1, Lua.evalText("x = 0\na = function()\nx = x + 1\nend\na()\nreturn x"));
 //   test.done();
