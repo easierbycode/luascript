@@ -205,6 +205,11 @@ exports.testIf = function(test) {
 }
 
 exports.testTDOT = function(test) {
+  // Invalid
+  test.throws(function(){
+    Lua.translateText("function x(a, b)\nreturn ...\nend");
+  }, "cannot use '...' outside a vararg function");
+
   // With binops
   test.strictEqual(3, Lua.evalText("function x(a, b, ...)\nreturn a + 2\nend\nreturn x(1,2,3)"));
   test.strictEqual(4, Lua.evalText("function x(a, b, ...)\nreturn b + 2\nend\nreturn x(1,2,3)"));
