@@ -222,6 +222,8 @@ exports.testTDOT = function(test) {
   test.strictEqual(5, Lua.evalText("function x(a, b, ...)\nreturn f(..., b)\nend\nreturn x(1,2,3,4)"));
   test.strictEqual(0, Lua.evalText("function x(a, b, ...)\nreturn f(a, ...)\nend\nreturn x(1,2,3,4)"));
   test.strictEqual(2, Lua.evalText("function x(a, b, ...)\nreturn f(a, ..., b)\nend\nreturn x(1,2,3)"));
+  test.strictEqual(2, Lua.evalText("function x(a, b, ...)\nreturn f(..., ...)\nend\nreturn x(1,2,3,4)"));
+  test.strictEqual(2, Lua.evalText("function x(a, b, ...)\nreturn f(..., ...)\nend\nreturn x(1,2,3,4,5)"));
 
   f = undefined; x = undefined;
   test.done();
