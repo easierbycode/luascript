@@ -32,6 +32,8 @@
 
 [0-9]+("."[0-9]+)?\b   return 'NUMBER'
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
+
+"..."                  return '...'
 "*"(\r?\n)*            return '*'
 "/"(\r?\n)*            return '/'
 "="(\r?\n)*            return '='
@@ -212,6 +214,8 @@ exp
         { $$ = ["TRUE"]; }
     | NUMBER
         { $$ = ["NUMBER", $1]; }
+    | '...'
+        { $$ = ["TDOT"]; }
     | function
         { $$ = $1; }
     | prefixexp
@@ -260,9 +264,13 @@ funcbody
     ;
 
 parlist
-    : namelist
+    : namelist comma '...'
+        { $1.push(["TDOT"]); $$ = $1; }
+    | namelist
         { $$ = $1; }
-    |
+    | '...'
+        { $$ = [["TDOT"]]; }
+    | /* empty */
         { $$ = []; }
     ;
 
