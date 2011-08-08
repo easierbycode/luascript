@@ -204,6 +204,17 @@ exports.testIf = function(test) {
   test.done();
 }
 
+exports.testTDOT = function(test) {
+  // With binops
+  test.strictEqual(3, Lua.evalText("function x(a, b, ...)\nreturn a + 2\nend\nreturn x(1,2,3)"));
+  test.strictEqual(4, Lua.evalText("function x(a, b, ...)\nreturn b + 2\nend\nreturn x(1,2,3)"));
+  test.strictEqual(5, Lua.evalText("function x(a, b, ...)\nreturn ... + 2\nend\nreturn x(1,2,3)"));
+  test.strictEqual(5, Lua.evalText("function x(a, b, ...)\nreturn ... + 2\nend\nreturn x(1,2,3,4)"));
+
+  x = undefined;
+  test.done();
+}
+
 // exports.testAllowFunctionCallAsStatement = function(test) {
 //   test.strictEqual(1, Lua.evalText("x = 0\na = function()\nx = x + 1\nend\na()\nreturn x"));
 //   test.done();
