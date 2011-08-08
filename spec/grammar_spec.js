@@ -119,7 +119,10 @@ exports.testDoEnd = function(test) {
   test.strictEqual(0, Lua.evalText("x = 0\ndo\nlocal x = 1\nend\nreturn x"));
   test.strictEqual(2, Lua.evalText("x = 0\ndo\nx = 2\nend\nreturn x"));
 
-  x = undefined;
+  // Assigning an external global variable to a local variable should work
+  // test.strictEqual(3, Lua.evalText("x = 1\na = 2\ndo\nlocal x = x\na = a + x\nend\nreturn a"));
+
+  a = undefined; x = undefined;
   test.done();
 }
 
