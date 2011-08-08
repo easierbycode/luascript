@@ -18,9 +18,11 @@ Those are limitations that happen at the syntax level:
 
   Maybe ECMAScript Harmony will provide tools to make this more viable;
 
-* goto statements may be implemented, but are not supported on first versions.
+* goto statements may be implemented, but are not supported on first versions;
 
-### Stdlib limitations
+### STDLIB limitations
+
+Limitations regarding STDLIB methods:
 
 * setmetatable does not support modifying __index and __newindex. ECMAScript's proxies will likely make this possible;
 
