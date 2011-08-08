@@ -18,7 +18,7 @@ Those are limitations that happen at the syntax level:
 
   Maybe ECMAScript Harmony will provide tools to make this more viable;
 
-* goto statements may be implemented, but are not supported on first versions;
+* goto statements may be implemented, but are not supported currently;
 
 ### STDLIB limitations
 
@@ -27,3 +27,7 @@ Limitations regarding STDLIB methods:
 * setmetatable does not support modifying __index and __newindex. ECMAScript's proxies will likely make this possible;
 
 * setfenv is not supported and probably never will;
+
+### Runtime limitations
+
+* Avoid tail recursion. They are not supported by JS runtimes;

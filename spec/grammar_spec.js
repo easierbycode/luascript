@@ -56,7 +56,15 @@ exports.testAnonymousFunctions = function(test) {
 }
 
 exports.testNamedFunctions = function(test) {
+  // Global named function
   test.strictEqual(3, Lua.evalText("function x(a, b)\nreturn a+b\nend\nreturn x(1,2)"));
+
+  // Local named function
+  x = undefined;
+  test.strictEqual(3, Lua.evalText("local function x(a, b)\nreturn a+b\nend\nreturn x(1,2)"));
+  x = undefined;
+  test.strictEqual(undefined, Lua.evalText("do\nlocal function x(a, b)\nreturn a+b\nend\nend\nreturn x"));
+
   x = undefined;
   test.done();
 }

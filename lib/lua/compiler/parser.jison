@@ -113,6 +113,13 @@ stat
         { $$ = ["REPEAT", $4, $2]; }
     | FUNCTION funcname funcbody
         { $$ = ["ASSIGN", [$2], [["FUNCTION", $3[0], $3[1]]]]; }
+    | LOCAL FUNCTION NAME funcbody
+        { $$ = ["BLOCK", [
+            ["ASSIGN", [["LOCALVAR", $3]], []],
+            ["COLON"],
+            ["ASSIGN", [["VAR", $3]], [["FUNCTION", $4[0], $4[1]]]]
+          ]];
+        }
     | LOCAL namelist
         { $$ = ["LOCAL_ASSIGN", $2, []]; }
     | LOCAL namelist '=' explist
