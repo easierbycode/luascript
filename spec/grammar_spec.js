@@ -137,6 +137,11 @@ exports.testDoEnd = function(test) {
   // Return
   test.strictEqual(10, Lua.evalText("do\nreturn 10\nend"));
 
+  // Check returnWrapper in wrapper function.
+  // If no return, no need to wrap the block.
+  test.strictEqual(false, !!Lua.translateText("do\na = 10\nend").match("returnWrapper"));
+  test.strictEqual(true,  !!Lua.translateText("do\nreturn 10\nend").match("returnWrapper"));
+
   // Assigning an external global variable to a local variable should work
   test.strictEqual(3, Lua.evalText("x = 1\na = 2\ndo\nlocal x = x\na = a + x\nend\nreturn a"));
 
