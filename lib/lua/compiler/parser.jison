@@ -111,6 +111,8 @@ stat
         { $$ = ["WHILE", $2, $4]; }
     | REPEAT block UNTIL exp
         { $$ = ["REPEAT", $4, $2]; }
+    | if
+        { $$ = $1; }
     | FUNCTION funcname funcbody
         { $$ = ["ASSIGN", [$2], [["FUNCTION", $3[0], $3[1]]]]; }
     | LOCAL FUNCTION NAME funcbody
@@ -124,6 +126,34 @@ stat
         { $$ = ["LOCAL_ASSIGN", $2, []]; }
     | LOCAL namelist '=' explist
         { $$ = ["LOCAL_ASSIGN", $2, $4]; }
+    ;
+
+if
+    : IF exp THEN block END
+        { $$ = ["IF", $2, $4, [], []]; }
+    | IF exp THEN block else END
+        { $$ = ["IF", $2, $4, [], $5]; }
+    | IF exp THEN block elseifs END
+        { $$ = ["IF", $2, $4, $5, []]; }
+    | IF exp THEN block elseifs else END
+        { $$ = ["IF", $2, $4, $5, $6]; }
+    ;
+
+elseifs
+    : elseifs elseif
+        { $1.push($2); $$ = $1; }
+    | elseif
+        { $$ = [$1]; }
+    ;
+
+elseif
+    : ELSEIF exp THEN block
+        { $$ = ["ELSEIF", exp, block]; }
+    ;
+
+else
+    : ELSE block
+        { $$ = $2; }
     ;
 
 retstat
