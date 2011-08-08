@@ -111,6 +111,8 @@ stat
         { $$ = ["WHILE", $2, $4]; }
     | REPEAT block UNTIL exp
         { $$ = ["REPEAT", $4, $2]; }
+    | FUNCTION funcname funcbody
+        { $$ = ["ASSIGN", [$2], [["FUNCTION", $3[0], $3[1]]]]; }
     | LOCAL namelist
         { $$ = ["LOCAL_ASSIGN", $2, []]; }
     | LOCAL namelist '=' explist
@@ -131,6 +133,11 @@ assignment
         { $$ = ["ASSIGN", [$1], [$3]]; }
     | var comma varlist '=' explist
         { $3.unshift($1); $$ = ["ASSIGN", $3, $5]; }
+    ;
+
+funcname
+    : NAME
+        { $$ = ["VAR", $1]; }
     ;
 
 varlist

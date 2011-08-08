@@ -55,6 +55,12 @@ exports.testAnonymousFunctions = function(test) {
   test.done();
 }
 
+exports.testNamedFunctions = function(test) {
+  test.strictEqual(3, Lua.evalText("function x(a, b)\nreturn a+b\nend\nreturn x(1,2)"));
+  x = undefined;
+  test.done();
+}
+
 exports.testFunctionCalls = function(test) {
   var fun;
   test.strictEqual(1, Lua.evalText("return (function ()\nreturn 1\nend)()"));
