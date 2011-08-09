@@ -257,7 +257,7 @@ exports.testTDOTAssignments = function(test) {
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal a = ...\nreturn a\nend\nreturn x(1)"));
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal a = ...\nreturn a\nend\nreturn x(1,2)"));
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal arguments = nil\nlocal a = ...\nreturn a\nend\nreturn x(1,2)"));
-  test.strictEqual(10, Lua.evalText("arguments = 10\nfunction x()\nreturn arguments\nend\nreturn x()"));
+  test.strictEqual(10, Lua.evalText("arguments = 10\nfunction this()\nreturn arguments\nend\nreturn this()"));
 
   // 2 x 2
   test.strictEqual(1, Lua.evalText("function x(...)\nlocal a, b = 1, ...\nreturn a\nend\nreturn x(2)"));
