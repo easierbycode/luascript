@@ -2,48 +2,48 @@
 %lex
 %%
 
-";"\s*(\r?\n)*         return 'SEMICOLON'
-(\r?\n)+               return 'NEWLINE'
-","\s*(\r?\n)*         return 'COMMA'
-\s+                    /* skip whitespace */
+";"\s*(\r?\n)*                     return 'SEMICOLON'
+(\r?\n)+                           return 'NEWLINE'
+","\s*(\r?\n)*                     return 'COMMA'
+\s+                                /* skip whitespace */
 
-"if"                   return "IF"
-"then"                 return "THEN"
-"else"                 return "ELSE"
-"elseif"               return "ELSEIF"
-"for"                  return "FOR"
-"in"                   return "IN"
-"not"                  return "NOT"
-"and"                  return "AND"
-"or"                   return "OR"
-"nil"                  return 'NIL'
-"true"                 return 'TRUE'
-"false"                return 'FALSE'
-"function"             return 'FUNCTION'
-"do"                   return 'DO'
-"return"               return 'RETURN'
-"end"                  return 'END'
-"local"                return 'LOCAL'
-"while"                return 'WHILE'
-"repeat"               return 'REPEAT'
-"until"                return 'UNTIL'
-"break"                return 'BREAK'
+"if"                               return "IF"
+"then"                             return "THEN"
+"else"                             return "ELSE"
+"elseif"                           return "ELSEIF"
+"for"                              return "FOR"
+"in"                               return "IN"
+"not"                              return "NOT"
+"and"                              return "AND"
+"or"                               return "OR"
+"nil"                              return 'NIL'
+"true"                             return 'TRUE'
+"false"                            return 'FALSE'
+"function"                         return 'FUNCTION'
+"do"                               return 'DO'
+"return"                           return 'RETURN'
+"end"                              return 'END'
+"local"                            return 'LOCAL'
+"while"                            return 'WHILE'
+"repeat"                           return 'REPEAT'
+"until"                            return 'UNTIL'
+"break"                            return 'BREAK'
 
-[0-9]+("."[0-9]+)?\b   return 'NUMBER'
-[a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
+"0x"[0-9a-fA-F]+                   return 'NUMBER'
+[0-9]+("."[0-9]+)?("e""-"?[0-9]+)? return 'NUMBER'
+[a-zA-Z_][0-9a-zA-Z_]*             return 'NAME'
 
-"..."                  return '...'
-"*"\s*(\r?\n)*         return '*'
-"/"\s*(\r?\n)*         return '/'
-"="\s*(\r?\n)*         return '='
-"-"\s*(\r?\n)*         return '-'
-"+"\s*(\r?\n)*         return '+'
-"("\s*(\r?\n)*         return '('
-"{"\s*(\r?\n)*         return '{'
-")"                    return ')'
-"}"                    return '}'
-
-<<EOF>>                return 'EOF'
+"..."                              return '...'
+"*"\s*(\r?\n)*                     return '*'
+"/"\s*(\r?\n)*                     return '/'
+"="\s*(\r?\n)*                     return '='
+"-"\s*(\r?\n)*                     return '-'
+"+"\s*(\r?\n)*                     return '+'
+"("\s*(\r?\n)*                     return '('
+"{"\s*(\r?\n)*                     return '{'
+")"                                return ')'
+"}"                                return '}'
+<<EOF>>                            return 'EOF'
 
 /lex
 

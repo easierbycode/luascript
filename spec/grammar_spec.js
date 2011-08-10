@@ -1,5 +1,14 @@
 require("lib/lua.js");
 
+exports.testNumbers = function(test){
+  test.strictEqual(13,  Lua.evalText("return 13"));
+  test.strictEqual(1.3, Lua.evalText("return 1.3"));
+  test.strictEqual(255, Lua.evalText("return 0xFF"));
+  test.strictEqual(1.3, Lua.evalText("return 13.0e-1"));
+  test.strictEqual(13,  Lua.evalText("return 1.3e1"));
+  test.done();
+};
+
 exports.testArithmeticExpressions = function(test){
   test.strictEqual(3, Lua.evalText("return 1+2"));
   test.strictEqual(0, Lua.evalText("return 1+(2-3)"));
