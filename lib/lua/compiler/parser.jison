@@ -2,10 +2,9 @@
 %lex
 %%
 
-";"\s*(\r?\n)+         return 'SEMICOLON'
-";"                    return 'SEMICOLON'
+";"\s*(\r?\n)*         return 'SEMICOLON'
 (\r?\n)+               return 'NEWLINE'
-","                    return 'COMMA'
+","\s*(\r?\n)*         return 'COMMA'
 \s+                    /* skip whitespace */
 
 "if"                   return "IF"
@@ -34,11 +33,11 @@
 [a-zA-Z_][0-9a-zA-Z_]* return 'NAME'
 
 "..."                  return '...'
-"*"(\r?\n)*            return '*'
-"/"(\r?\n)*            return '/'
-"="(\r?\n)*            return '='
-"-"(\r?\n)*            return '-'
-"+"(\r?\n)*            return '+'
+"*"\s*(\r?\n)*         return '*'
+"/"\s*(\r?\n)*         return '/'
+"="\s*(\r?\n)*         return '='
+"-"\s*(\r?\n)*         return '-'
+"+"\s*(\r?\n)*         return '+'
 "("                    return '('
 ")"                    return ')'
 <<EOF>>                return 'EOF'
@@ -170,7 +169,7 @@ assignment
     : var '=' exp
         /* Force = to avoid conflicts with prefixexp */
         { $$ = ["ASSIGN", [$1], [$3]]; }
-    | var comma varlist '=' explist
+    | var COMMA varlist '=' explist
         { $3.unshift($1); $$ = ["ASSIGN", $3, $5]; }
     ;
 
@@ -180,7 +179,7 @@ funcname
     ;
 
 varlist
-    : varlist comma var
+    : varlist COMMA var
         { $1.push($3); $$ = $3; }
     | var
         { $$ = [$1]; }
@@ -192,14 +191,14 @@ var
     ;
 
 namelist
-    : namelist comma NAME
+    : namelist COMMA NAME
         { $1.push(["VAR", $3]); $$ = $1; }
     | NAME
         { $$ = [["VAR", $1]]; }
     ;
 
 explist
-    : explist comma exp
+    : explist COMMA exp
         { $1.push($3); $$ = $1 }
     | exp
         { $$ = [$1]; }
@@ -264,7 +263,7 @@ funcbody
     ;
 
 parlist
-    : namelist comma '...'
+    : namelist COMMA '...'
         { $1.push(["TDOT"]); $$ = $1; }
     | namelist
         { $$ = $1; }
@@ -279,11 +278,4 @@ eol
         { $$ = ["SEMICOLON"]; }
     | NEWLINE
         { $$ = ["NEWLINE"]; }
-    ;
-
-comma
-    : COMMA
-        { $$ = $1; }
-    | COMMA NEWLINE
-        { $$ = $1; }
     ;
