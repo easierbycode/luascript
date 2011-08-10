@@ -210,7 +210,7 @@ exports.testIf = function(test) {
   test.done();
 }
 
-exports.testELLIPSIS = function(test) {
+exports.testEllipsis = function(test) {
   // With binops
   test.strictEqual(3, Lua.evalText("function x(a, b, ...)\nreturn a + 2\nend\nreturn x(1,2,3)"));
   test.strictEqual(4, Lua.evalText("function x(a, b, ...)\nreturn b + 2\nend\nreturn x(1,2,3)"));
@@ -240,7 +240,7 @@ exports.testELLIPSIS = function(test) {
   test.done();
 }
 
-exports.testELLIPSISAssignments = function(test) {
+exports.testEllipsisAssignments = function(test) {
   // Invalid
   test.throws(function(){
     Lua.translateText("function x(a, b)\na = ...\nend");
@@ -310,6 +310,16 @@ exports.testELLIPSISAssignments = function(test) {
   test.strictEqual(3, Lua.evalText("function x(...)\nlocal a, b, c, d = ..., ...\nreturn d\nend\nreturn x(1,2,3,4)"));
 
   x = undefined;
+  test.done();
+}
+
+exports.testTable = function(test) {
+  // Basic structures
+  test.deepEqual({}, Lua.evalText("return {}"));
+  test.deepEqual({"a":1, "b":2}, Lua.evalText("return {a = 1,b = 2,}"));
+  test.deepEqual({"a":1, "b":2}, Lua.evalText("return {a = 1,b = 2;}"));
+  test.deepEqual({"a":1, "b":2}, Lua.evalText("return {\na = 1,\nb = 2\n}"));
+
   test.done();
 }
 

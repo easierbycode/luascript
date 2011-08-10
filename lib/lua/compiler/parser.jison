@@ -223,6 +223,8 @@ exp
         { $$ = $1; }
     | prefixexp
         { $$ = $1; }
+    | tableconstructor
+        { $$ = $1; }
     | exp '*' exp
         { $$ = ["BINOP", $2, $1, $3]; }
     | exp '/' exp
@@ -278,10 +280,21 @@ parlist
     ;
 
 tableconstructor
-    : open_curly close_curly
-        { $$ = ["TABLE", []]; }
-    | open_curly fieldlist close_curly
-        { $$ = ["TABLE", []]; }
+    : open_curly fieldlist close_curly
+        { $$ = ["TABLE", $2]; }
+    | open_curly fieldlist COMMA close_curly
+        { $$ = ["TABLE", $2]; }
+    ;
+
+fieldlist
+    : fieldlist COMMA field
+        { $1.push($3); $$ = $1; }
+    | fieldlist SEMICOLON field
+        { $1.push($3); $$ = $1; }
+    | field
+        { $$ = [$1]; }
+    | /* empty */
+        { $$ = []; }
     ;
 
 field
