@@ -2,8 +2,8 @@
 %lex
 %%
 
-";"\s*(\r?\n)+         return 'COLON'
-";"                    return 'COLON'
+";"\s*(\r?\n)+         return 'SEMICOLON'
+";"                    return 'SEMICOLON'
 (\r?\n)+               return 'NEWLINE'
 ","                    return 'COMMA'
 \s+                    /* skip whitespace */
@@ -120,7 +120,7 @@ stat
     | LOCAL FUNCTION NAME funcbody
         { $$ = ["BLOCK", [
             ["ASSIGN", [["LOCALVAR", $3]], []],
-            ["COLON"],
+            ["SEMICOLON"],
             ["ASSIGN", [["VAR", $3]], [["FUNCTION", $4[0], $4[1]]]]
           ]];
         }
@@ -275,8 +275,8 @@ parlist
     ;
 
 eol
-    : COLON
-        { $$ = ["COLON"]; }
+    : SEMICOLON
+        { $$ = ["SEMICOLON"]; }
     | NEWLINE
         { $$ = ["NEWLINE"]; }
     ;
