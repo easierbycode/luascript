@@ -29,6 +29,8 @@
 "until"                            return 'UNTIL'
 "break"                            return 'BREAK'
 
+\"(\\\"|[^"])*\"                    return 'STRING'
+\'(\\\'|[^'])*\'                         return 'STRING'
 "0x"[0-9a-fA-F]+                   return 'NUMBER'
 [0-9]+("."[0-9]+)?("e""-"?[0-9]+)? return 'NUMBER'
 [a-zA-Z_][0-9a-zA-Z_]*             return 'NAME'
@@ -217,6 +219,8 @@ exp
         { $$ = ["TRUE"]; }
     | NUMBER
         { $$ = ["NUMBER", $1]; }
+    | STRING
+        { $$ = ["STRING", $1]; }
     | '...'
         { $$ = ["ELLIPSIS"]; }
     | function

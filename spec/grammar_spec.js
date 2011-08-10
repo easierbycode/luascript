@@ -9,6 +9,16 @@ exports.testNumbers = function(test){
   test.done();
 };
 
+exports.testStrings = function(test){
+  test.strictEqual("foo",   Lua.evalText('return "foo"'));
+  test.strictEqual('foo',   Lua.evalText("return 'foo'"));
+  test.strictEqual("f\"o",  Lua.evalText('return "f\\"o"'));
+  test.strictEqual("f\'o",  Lua.evalText("return 'f\\'o'"));
+  test.strictEqual("f\no",  Lua.evalText('return "f\\no"'));
+  test.strictEqual("f\no",  Lua.evalText("return 'f\\no'"));
+  test.done();
+};
+
 exports.testArithmeticExpressions = function(test){
   test.strictEqual(3, Lua.evalText("return 1+2"));
   test.strictEqual(0, Lua.evalText("return 1+(2-3)"));
