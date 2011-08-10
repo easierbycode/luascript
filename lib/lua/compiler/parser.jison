@@ -40,6 +40,9 @@
 "+"\s*(\r?\n)*         return '+'
 "("                    return '('
 ")"                    return ')'
+"{"                    return '{'
+"}"                    return '}'
+
 <<EOF>>                return 'EOF'
 
 /lex
@@ -271,6 +274,18 @@ parlist
         { $$ = [["TDOT"]]; }
     | /* empty */
         { $$ = []; }
+    ;
+
+tableconstructor
+    : '{' '}'
+        { $$ = ["TABLE", []]; }
+    | '{' fieldlist '}'
+        { $$ = ["TABLE", []]; }
+    ;
+
+field
+    : NAME '=' exp
+        { $$ = ["KEYVALUE", $1, $3]; }
     ;
 
 eol
