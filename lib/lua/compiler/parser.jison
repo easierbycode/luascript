@@ -38,9 +38,9 @@
 "="\s*(\r?\n)*         return '='
 "-"\s*(\r?\n)*         return '-'
 "+"\s*(\r?\n)*         return '+'
-"("                    return '('
+"("\s*(\r?\n)*         return '('
+"{"\s*(\r?\n)*         return '{'
 ")"                    return ')'
-"{"                    return '{'
 "}"                    return '}'
 
 <<EOF>>                return 'EOF'
@@ -56,6 +56,7 @@
 %left '+' '-'
 %left '*' '/' '%'
 %right '^'
+%open_parens '('
 
 %start expressions
 
@@ -217,7 +218,7 @@ exp
     | NUMBER
         { $$ = ["NUMBER", $1]; }
     | '...'
-        { $$ = ["TDOT"]; }
+        { $$ = ["ELLIPSIS"]; }
     | function
         { $$ = $1; }
     | prefixexp
@@ -239,7 +240,7 @@ prefixexp
         { $$ = $1; }
     | functioncall
         { $$ = $1; }
-    | '(' exp ')'
+    | open_parens exp close_parens
         { $$ = $2; }
     ;
 
@@ -249,9 +250,9 @@ functioncall
     ;
 
 args
-    : '(' ')'
+    : open_parens close_parens
         { $$ = []; }
-    | '(' explist ')'
+    | open_parens explist close_parens
         { $$ = $2; }
     ;
 
@@ -261,25 +262,25 @@ function
     ;
 
 funcbody
-    : '(' parlist ')' block END
+    : open_parens parlist close_parens block END
         { $$ = [$2, $4]; }
     ;
 
 parlist
     : namelist COMMA '...'
-        { $1.push(["TDOT"]); $$ = $1; }
+        { $1.push(["ELLIPSIS"]); $$ = $1; }
     | namelist
         { $$ = $1; }
     | '...'
-        { $$ = [["TDOT"]]; }
+        { $$ = [["ELLIPSIS"]]; }
     | /* empty */
         { $$ = []; }
     ;
 
 tableconstructor
-    : '{' '}'
+    : open_curly close_curly
         { $$ = ["TABLE", []]; }
-    | '{' fieldlist '}'
+    | open_curly fieldlist close_curly
         { $$ = ["TABLE", []]; }
     ;
 
@@ -293,4 +294,28 @@ eol
         { $$ = ["SEMICOLON"]; }
     | NEWLINE
         { $$ = ["NEWLINE"]; }
+    ;
+
+open_parens
+    : '('
+        { $$ = $1; }
+    ;
+
+close_parens
+    : eol ')'
+        { $$ = $2; }
+    | ')'
+        { $$ = $1; }
+    ;
+
+open_curly
+    : '{'
+        { $$ = $1; }
+    ;
+
+close_curly
+    : eol '}'
+        { $$ = $2; }
+    | '}'
+        { $$ = $1; }
     ;

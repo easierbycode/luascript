@@ -3,6 +3,7 @@ require("lib/lua.js");
 exports.testArithmeticExpressions = function(test){
   test.strictEqual(3, Lua.evalText("return 1+2"));
   test.strictEqual(0, Lua.evalText("return 1+(2-3)"));
+  test.strictEqual(0, Lua.evalText("return 1+(\n2-\n3\n)"));
   test.strictEqual(-2, Lua.evalText("return -1+(2-3)"));
   test.strictEqual(-10, Lua.evalText("return 10*(2-3)"));
   test.strictEqual(-10, Lua.evalText("return 10/(2-3);"));
