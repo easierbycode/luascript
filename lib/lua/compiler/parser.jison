@@ -262,6 +262,10 @@ args
         { $$ = []; }
     | open_parens explist close_parens
         { $$ = $2; }
+    | STRING
+        { $$ = [["STRING", $1]]; }
+    | tableconstructor
+        { $$ = [$1]; }
     ;
 
 function

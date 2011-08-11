@@ -104,8 +104,10 @@ exports.testNamedFunctions = function(test) {
 
 exports.testFunctionCalls = function(test) {
   var fun;
-  test.strictEqual(1, Lua.evalText("return (function ()\nreturn 1\nend)()"));
-  test.strictEqual(1, Lua.evalText("return (function ()\nreturn (function ()\nreturn 1\nend)\nend)()()"));
+  test.strictEqual(1,      Lua.evalText("return (function ()\nreturn 1\nend)()"));
+  test.strictEqual("abc",  Lua.evalText("return (function (a)\nreturn a\nend)\"abc\""));
+  test.deepEqual({"a":1},  Lua.evalText("return (function (a)\nreturn a\nend){a=1}"));
+  test.strictEqual(1,      Lua.evalText("return (function ()\nreturn (function ()\nreturn 1\nend)\nend)()()"));
   test.done();
 }
 
