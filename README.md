@@ -16,7 +16,7 @@ Those are limitations that happen at the syntax level:
           return 1, 2
         end
 
-  Maybe ECMAScript Harmony will provide tools to make this more viable;
+    Maybe ECMAScript Harmony will provide tools to make this more viable;
 
 * goto statements may be implemented, but are not supported currently;
 
