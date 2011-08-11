@@ -2,6 +2,7 @@ require("lib/lua.js");
 
 exports.testNumbers = function(test){
   test.strictEqual(13,  Lua.evalText("return 13"));
+  test.strictEqual(13,  Lua.evalText("return 013"));
   test.strictEqual(1.3, Lua.evalText("return 1.3"));
   test.strictEqual(255, Lua.evalText("return 0xFF"));
   test.strictEqual(1.3, Lua.evalText("return 13.0e-1"));
@@ -16,6 +17,13 @@ exports.testStrings = function(test){
   test.strictEqual("f\'o",  Lua.evalText("return 'f\\'o'"));
   test.strictEqual("f\no",  Lua.evalText('return "f\\no"'));
   test.strictEqual("f\no",  Lua.evalText("return 'f\\no'"));
+
+  test.strictEqual("f=o",    Lua.evalText("return 'f\\61o'"));
+  test.strictEqual("f=o",    Lua.evalText("return 'f\\061o'"));
+  test.strictEqual("=oo",    Lua.evalText("return '\\61oo'"));
+  test.strictEqual("=123",   Lua.evalText("return '\\061123'"));
+  test.strictEqual("===",    Lua.evalText("return '\\061=\\061'"));
+  test.strictEqual("f\\61o", Lua.evalText("return 'f\\\\61o'"));
   test.done();
 };
 
