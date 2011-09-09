@@ -2,6 +2,8 @@
 
 Translate Lua 5.2 to Javascript.
 
+This is 70% done. Mainly tables and metatables still need to be implemented and there is a bug in JISON holding part of the grammar.
+
 ## Intrinsic limitations
 
 Obviously, porting Lua to JavaScript has some feature limitations. Some of those limitations are obvious, like access to C endpoints, but some are not. These section outlines those limitations.
